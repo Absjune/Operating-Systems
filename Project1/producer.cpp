@@ -11,8 +11,8 @@ int main(){
     int* table;
 
     //Allocate shared memory
-    Shared = shm_open("table",create | O_RDWR, 0666); //Create the table
-    ftruncate(Shared, sizeof(int)); //Setting the size of the shared memory
+    Shared = shm_open("table",create | O_RDWR, 0666); //Create table
+    ftruncate(Shared, sizeof(int)); //Setting the size
     table = static_cast<int*>(mmap(0,sizeof(int),protRead | protWrite, mapShareMem, Shared, 0)); //Mapping object to address
     sem_t* full = sem_open("full",create,0666,0);
     sem_t* empty = sem_open("empty",create,0666,3);
@@ -22,21 +22,21 @@ int main(){
 
     for (int i = 0; i < 5; ++i) {
         semaphoreWait(empty);
-        sleep(1); // sleep for 1 sec
+        sleep(1); //1 sec
 
         semaphoreWait(mutex); // unlock
-        if (*table < 2) { // if table isn't full: (that is, the table does not have 2 items))
+        if (*table < 2) { // if table does not have 2 items
             ++(*table);    // add new item in the table
             std::cout << "Produced an item." << std::endl << "Table contains: " << *table << " items";
         }
         else {
             std::cout << "Table is full!";
         }
-        semaphorePost(mutex); // close the mutex
+        semaphorePost(mutex); // close
         semaphorePost(full);
     }
-    sleep(3);   // sleep for 1 sec
-    std::cout << "Press enter to exit the completed  process.";
+    sleep(3); //1 sec
+    std::cout << "Press enter to exit the completed  process." << std::endl;
 
     //Closing semaphores
     semaphoreClose(full);
