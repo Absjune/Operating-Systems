@@ -44,7 +44,7 @@ int main(){
     semaphoreUnlink("mutex");
 
     //Deallocate the shared memory
-    munmap(table, size(int));
+    munmap(table, sizeof(int));
     close(Shared);
     shm_unlink("table");
     return 0;
