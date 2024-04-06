@@ -12,8 +12,8 @@ int main(){
 
     //Allocate the shared memory
     Shared = shareOpen("table",create | O_RDWR, 0666); //Create the table
-    ftruncate(Shared, size(int)); //Setting the size of the shared memory
-    table = static_cast<int*>(mmap(0,size(int),protRead | protWrite, mapShared, Shared, 0)); //Mapping object to address
+    ftruncate(Shared, sizeof(int)); //Setting the size of the shared memory
+    table = static_cast<int*>(mmap(0,sizeof(int),protRead | protWrite, mapShared, Shared, 0)); //Mapping object to address
     sem_t* full = sem_open("full",create,0666,0);
     sem_t* empty = sem_open("empty",create,0666,3);
     sem_t* mutex = sem_open("mutex",create, 0666, 1);
