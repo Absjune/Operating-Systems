@@ -6,12 +6,11 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-
 int main(){
     int Shared;
     int* table;
 
-    //Allocate the shared memory
+    //Allocate shared memory
     Shared = shm_open("table",create | O_RDWR, 0666); //Create the table
     ftruncate(Shared, sizeof(int)); //Setting the size of the shared memory
     table = static_cast<int*>(mmap(0,sizeof(int),protRead | protWrite, mapShareMem, Shared, 0)); //Mapping object to address
@@ -40,13 +39,11 @@ int main(){
     std::cout << "Press enter to exit the completed  process.";
 
     //Closing semaphores
-
     semaphoreClose(full);
     semaphoreClose(empty);
     semaphoreClose(mutex);
 
     //Unlink semaphores
-
     semaphoreUnlink("full");
     semaphoreUnlink("empty");
     semaphoreUnlink("mutex");
